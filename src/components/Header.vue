@@ -101,6 +101,7 @@ export default {
 
     &__list {
       align-items: flex-end;
+      transition: all linear .3s;
     }
 
     &__item:not(.logo-item) {

@@ -1,25 +1,28 @@
 <template>
-  <ul class="row flex-row align-items-center justify-content-between">
+  <div>
     <p
       class="text-dark text-bold text-center"
       v-if="getAcquiredStocks.length < 1">
       Portfolio is empty
     </p>
     <template v-else>
-      <app-card-of-stocks
-        v-for="(item, key) of getAcquiredStocks"
-        :key="key"
-        :background="'stock-card__header--portfolio'"
-        :class-title="'text-primary'"
-        :title-text="item.title"
-        :subtitle-text="`Price:${item.price}`"
-        :separator="' | '"
-        :subtitle-text-sell="`Quantity:${item.quantity}`"
-        :class-button="'btn-danger'"
-        :button-text="'Sell'">
-      </app-card-of-stocks>
+      <ul class="row flex-row align-items-center justify-content-between">
+        <app-card-of-stocks
+          v-for="(item, key) of getAcquiredStocks"
+          :key="key"
+          :action="'cell'"
+          :background="'stock-card__header--portfolio'"
+          :class-title="'text-primary'"
+          :title-text="item.title"
+          :subtitle-text="`Price:${item.price}`"
+          :separator="' | '"
+          :subtitle-text-sell="`Quantity:${item.quantity}`"
+          :class-button="'btn-danger'"
+          :button-text="'Sell'">
+        </app-card-of-stocks>
+      </ul>
     </template>
-  </ul>
+  </div>
 </template>
 
 <script>

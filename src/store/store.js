@@ -36,6 +36,7 @@ export default new Vuex.Store({
       return state.actualStocks
     },
     getAcquiredStocks(state) {
+      console.log(state.acquiredStocks)
       return state.acquiredStocks
     },
     getDisabled(state) {
@@ -59,13 +60,27 @@ export default new Vuex.Store({
     setDisabled(state, payload) {
       state.disabled = payload
     },
-    setFunds(state, payload) {
-      state.funds -= payload.cost * payload.quantity
-      state.acquiredStocks.push({
-        title: payload.title,
-        price: payload.cost,
-        quantity: payload.quantity,
-      })
+    setBuyFunds(state, { price, title, quantity }) {
+      const record = state.acquiredStocks.find(item => item.title === title);
+      if (record) {
+        record.quantity += quantity
+      } else {
+        state.acquiredStocks.push({
+          title,
+          price,
+          quantity,
+        })
+      }
+      state.funds -= price * quantity
+    },
+    setCellFunds(state, { price, title, quantity }) {
+      const record = state.acquiredStocks.find(item => item.title === title);
+      if (record.quantity > quantity) {
+        record.quantity -= quantity
+      } else {
+        state.acquiredStocks.splice(state.acquiredStocks.indexOf(record), 1)
+      }
+      state.funds += price * quantity
     },
   },
   /* --- ACTIONS --- */

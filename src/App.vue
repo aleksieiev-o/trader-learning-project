@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <app-header></app-header>
-    <router-view></router-view>
+    <transition name="slide" type="animation" mode="out-in" appear>
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -59,5 +61,34 @@ export default {
 
   .text-bold {
     font-weight: 700;
+  }
+
+  .slide-enter {
+    opacity: 0;
+  }
+  .slide-enter-active {
+    animation: slide-in .5s linear;
+    transition: opacity .5s;
+  }
+  .slide-leave-active {
+    animation: slide-out .5s linear;
+    transition: opacity .5s;
+    opacity: 0;
+  }
+  @keyframes slide-in {
+    from {
+      transform: translateY(-20px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  @keyframes slide-out {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-20px);
+    }
   }
 </style>

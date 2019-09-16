@@ -6,7 +6,13 @@
     </div>
     <div class="stock-card__body">
       <input type="number" class="form-control" placeholder="Quantity" v-model.number="quantity">
-      <button class="btn" :class="classButton" @click="buyStock">{{ buttonText }}</button>
+      <button
+        class="btn"
+        :class="classButton"
+        :disabled="quantity <=0 || !Number.isInteger(quantity)"
+        @click="actionOfStocks(action)">
+        {{ buttonText }}
+      </button>
     </div>
   </li>
 </template>
@@ -15,6 +21,10 @@
 export default {
   name: 'CardOfStocks',
   props: {
+    action: {
+      type: String,
+      required: true,
+    },
     background: {
       type: String,
       required: true,
@@ -47,16 +57,22 @@ export default {
     },
   },
   methods: {
-    buyStock() {
-      if (this.quantity === '' || this.quantity < 0 || this.quantity === 0) {
-        this.quantity = 1
+    actionOfStocks(act) {
+      if (act === 'buy') {
+        this.$store.commit('setBuyFunds', {
+          price: parseInt(this.subtitleText.slice(6), 10),
+          title: this.titleText,
+          quantity: this.quantity,
+        })
+        this.quantity = ''
+      } else if (act === 'cell') {
+        this.$store.commit('setCellFunds', {
+          price: parseInt(this.subtitleText.slice(6), 10),
+          title: this.titleText,
+          quantity: this.quantity,
+        })
+        this.quantity = ''
       }
-      this.$store.commit('setFunds', {
-        cost: parseInt(this.subtitleText.slice(6), 10),
-        title: this.titleText,
-        quantity: this.quantity,
-      })
-      this.quantity = ''
     },
   },
   data() {

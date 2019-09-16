@@ -3,6 +3,7 @@
     <app-card-of-stocks
       v-for="(item, key) of getActualStocks"
       :key="key"
+      :action="'buy'"
       :background="'stock-card__header--stocks'"
       :class-title="'text-success'"
       :title-text="item.title"
