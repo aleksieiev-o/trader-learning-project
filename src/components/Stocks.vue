@@ -7,7 +7,7 @@
       :background="'stock-card__header--stocks'"
       :class-title="'text-success'"
       :title-text="item.title"
-      :subtitle-text="`Price:${item.price}`"
+      :subtitle-text="item.price"
       :class-button="'btn-success'"
       :button-text="'Buy'">
     </app-card-of-stocks>

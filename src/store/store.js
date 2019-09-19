@@ -7,25 +7,25 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   /* --- STATE --- */
   state: {
-    funds: 1000,
+    funds: 5000,
     actualStocks: [],
     acquiredStocks: [],
     stocks: [
       {
         title: 'BMW',
-        price: 80,
+        price: 150,
       },
       {
         title: 'Google',
-        price: 45,
+        price: 450,
       },
       {
         title: 'Facebook',
-        price: 100,
+        price: 250,
       },
       {
         title: 'Twitter',
-        price: 65,
+        price: 180,
       },
     ],
     disabled: false,
@@ -36,7 +36,6 @@ export default new Vuex.Store({
       return state.actualStocks
     },
     getAcquiredStocks(state) {
-      console.log(state.acquiredStocks)
       return state.acquiredStocks
     },
     getDisabled(state) {
@@ -54,7 +53,12 @@ export default new Vuex.Store({
     setNewStocksProperties(state) {
       const randomFuncPrice = (min, max) => Math.floor(min + Math.random() * (max + 1 - min))
       state.actualStocks.forEach((item) => {
+        // eslint-disable-next-line no-param-reassign
         item.price += randomFuncPrice(-10, 10)
+        const itemPrice = state.acquiredStocks.find(cost => cost.title === item.title)
+        if (itemPrice) {
+          itemPrice.price = item.price
+        }
       })
     },
     setDisabled(state, payload) {
@@ -88,7 +92,7 @@ export default new Vuex.Store({
     /* load data in DB */
     loadStocks({ state }) {
       axios({
-        method: 'post',
+        method: 'put',
         url: 'https://stock-app-6807c.firebaseio.com/stocks.json',
         data: state.stocks,
       })

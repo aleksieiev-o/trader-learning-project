@@ -14,10 +14,10 @@
           :background="'stock-card__header--portfolio'"
           :class-title="'text-primary'"
           :title-text="item.title"
-          :subtitle-text="`Price:${item.price}`"
+          :subtitle-text="item.price"
           :separator="' | '"
-          :subtitle-text-sell="`Quantity:${item.quantity}`"
-          :class-button="'btn-danger'"
+          :subtitle-text-sell="item.quantity"
+          :class-button="'btn-primary'"
           :button-text="'Sell'">
         </app-card-of-stocks>
       </ul>

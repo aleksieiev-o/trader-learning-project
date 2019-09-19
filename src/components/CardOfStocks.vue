@@ -2,14 +2,23 @@
   <li class="stock-card col-md-6">
     <div class="stock-card__header" :class="background">
       <h4 class="card-title" :class="classTitle">{{ titleText }}</h4>
-      <span :class="classTitle">({{ subtitleText }}{{ separator }}{{ subtitleTextSell }})</span>
+      <span :class="classTitle">
+        ( {{ subtitleText | price }}
+        <span v-if="subtitleTextSell">{{ separator }}{{ subtitleTextSell | quantity }}</span>
+        )
+      </span>
     </div>
     <div class="stock-card__body">
-      <input type="number" class="form-control" placeholder="Quantity" v-model.number="quantity">
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Quantity"
+        :class="{'text-danger': maxAmountFunds}"
+        v-model.number="quantity">
       <button
         class="btn"
         :class="classButton"
-        :disabled="quantity <=0 || !Number.isInteger(quantity)"
+        :disabled="maxAmountFunds || quantity <=0 || !Number.isInteger(quantity)"
         @click="actionOfStocks(action)">
         {{ buttonText }}
       </button>
@@ -18,6 +27,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'CardOfStocks',
   props: {
@@ -38,14 +49,14 @@ export default {
       required: true,
     },
     subtitleText: {
-      type: String,
+      type: Number,
       required: true,
     },
     separator: {
       type: String,
     },
     subtitleTextSell: {
-      type: String,
+      type: Number,
     },
     classButton: {
       type: String,
@@ -56,18 +67,27 @@ export default {
       required: true,
     },
   },
+  computed: {
+    ...mapGetters(['getFunds']),
+    maxAmountFunds() {
+      if (this.subtitleTextSell) {
+        return this.quantity > this.subtitleTextSell
+      }
+      return this.subtitleText * this.quantity > this.getFunds
+    },
+  },
   methods: {
     actionOfStocks(act) {
       if (act === 'buy') {
         this.$store.commit('setBuyFunds', {
-          price: parseInt(this.subtitleText.slice(6), 10),
+          price: this.subtitleText,
           title: this.titleText,
           quantity: this.quantity,
         })
         this.quantity = ''
       } else if (act === 'cell') {
         this.$store.commit('setCellFunds', {
-          price: parseInt(this.subtitleText.slice(6), 10),
+          price: this.subtitleText,
           title: this.titleText,
           quantity: this.quantity,
         })

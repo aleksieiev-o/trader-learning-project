@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <app-header></app-header>
-    <transition name="slide" type="animation" mode="out-in" appear>
+    <transition name="slide" type="animation" mode="out-in">
       <router-view></router-view>
     </transition>
   </div>
@@ -15,6 +15,9 @@ export default {
   components: {
     'app-header': AppHeader,
   },
+  // created() {
+  //   this.$store.dispatch('loadStocks')
+  // },
 }
 </script>
 
@@ -67,11 +70,11 @@ export default {
     opacity: 0;
   }
   .slide-enter-active {
-    animation: slide-in .5s linear;
+    animation: slide-in .5s linear forwards;
     transition: opacity .5s;
   }
   .slide-leave-active {
-    animation: slide-out .5s linear;
+    animation: slide-out .5s linear forwards;
     transition: opacity .5s;
     opacity: 0;
   }

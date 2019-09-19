@@ -42,7 +42,7 @@
           <option value="1">Save Data</option>
           <option value="2">Load Data</option>
         </select>
-        <p class="text-dark text-bold">Funds: ${{ funds }}</p>
+        <p class="text-dark text-bold">Funds: {{ funds | currency }}</p>
       </div>
     </div>
   </div>
