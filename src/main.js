@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import bootstrap from 'bootstrap'
 
 import router from './router'
 import store from './store/store'
@@ -16,5 +17,6 @@ Vue.filter('quantity', val => `Quantity: ${val}`)
 new Vue({
   router,
   store,
+  bootstrap,
   render: h => h(App),
 }).$mount('#app')

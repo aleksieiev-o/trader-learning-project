@@ -33,9 +33,11 @@ export default new Vuex.Store({
   /* --- GETTERS --- */
   getters: {
     getActualStocks(state) {
+      // console.log(state.actualStocks)
       return state.actualStocks
     },
     getAcquiredStocks(state) {
+      // console.log(state.acquiredStocks)
       return state.acquiredStocks
     },
     getDisabled(state) {
@@ -86,6 +88,11 @@ export default new Vuex.Store({
       }
       state.funds += price * quantity
     },
+    writeSavingData(state, payload) {
+      state.funds = payload.funds ? payload.funds : 0
+      state.actualStocks = payload.actualStocks ? payload.actualStocks : []
+      state.acquiredStocks = payload.portfolio ? payload.portfolio : []
+    },
   },
   /* --- ACTIONS --- */
   actions: {
@@ -115,6 +122,18 @@ export default new Vuex.Store({
         url: 'https://stock-app-6807c.firebaseio.com/stocks.json',
         data: state.actualStocks,
       })
+        .then(() => commit('setDisabled', false))
+        .catch(err => console.error(err))
+    },
+    loadData({ commit }) {
+      commit('setDisabled', true)
+      axios.get('https://stock-app-6807c.firebaseio.com/saveData.json')
+        .then((resp) => {
+          const response = resp
+          commit('writeSavingData', response.data)
+          return response.data
+        })
+        // .then(resp => console.log(resp))
         .then(() => commit('setDisabled', false))
         .catch(err => console.error(err))
     },

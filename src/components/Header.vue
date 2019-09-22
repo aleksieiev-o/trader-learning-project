@@ -34,14 +34,24 @@
         <button class="btn btn-outline-secondary" @click="endDay" :disabled="disabled">
           End day
         </button>
-        <select
-          name="saveLoad"
-          id="saveLoad"
-          class="custom-select">
-          <option disabled value="">Save & Load</option>
-          <option value="1">Save Data</option>
-          <option value="2">Load Data</option>
-        </select>
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdownMenuLink"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              :disabled="disabled">
+              Save & Load
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#" @click.prevent="saveData">Save Data</a>
+              <a class="dropdown-item" href="#" @click.prevent="loadData">Load Data</a>
+            </div>
+          </li>
+        </ul>
         <p class="text-dark text-bold">Funds: {{ funds | currency }}</p>
       </div>
     </div>
@@ -50,6 +60,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'Header',
@@ -57,11 +68,31 @@ export default {
     ...mapGetters({
       disabled: 'getDisabled',
       funds: 'getFunds',
+      actualStocks: 'getActualStocks',
+      acquiredStocks: 'getAcquiredStocks',
     }),
   },
   methods: {
     endDay() {
       this.$store.dispatch('beginNewDay')
+    },
+    saveData() {
+      this.$store.commit('setDisabled', true)
+      axios({
+        method: 'put',
+        url: 'https://stock-app-6807c.firebaseio.com/saveData.json',
+        data: {
+          funds: this.funds,
+          actualStocks: this.actualStocks,
+          portfolio: this.acquiredStocks,
+        },
+      })
+        // .then(resp => console.log(resp))
+        .then(() => this.$store.commit('setDisabled', false))
+        .catch(err => console.error(err))
+    },
+    loadData() {
+      this.$store.dispatch('loadData')
     },
   },
 }
@@ -126,11 +157,6 @@ export default {
   .logo-text {
     font-size: 20px;
     font-weight: bold;
-  }
-
-  .custom-select {
-    width: 115px;
-    border: none;
   }
 
   .btn {

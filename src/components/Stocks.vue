@@ -24,7 +24,7 @@ export default {
     'app-card-of-stocks': CardOfStocks,
   },
   created() {
-    this.$store.dispatch('loadActualStocks')
+    if (this.getActualStocks.length === 0) this.$store.dispatch('loadActualStocks')
   },
   computed: {
     ...mapGetters([

@@ -24,6 +24,14 @@ export default {
 <style lang="scss">
   @import "../node_modules/bootstrap/scss/bootstrap";
 
+  html {
+    height: 100%;
+  }
+
+  body {
+    height: 100%;
+  }
+
   p {
     margin: 0;
   }
