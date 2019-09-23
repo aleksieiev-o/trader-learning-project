@@ -21,3 +21,5 @@ yarn-error.log*
 *.sw?
 
 *.stackdump
+*.sh
+vue.config.js
